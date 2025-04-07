@@ -17,6 +17,7 @@ const imageFilenames = [
     "images/aquarium.jpeg",
     "images/canteen.jpeg",
     "images/cheers.jpeg",
+    "images/gardens.jpeg",
     "images/littleindia.jpeg",
     "images/mickeyds.jpeg",
     "images/shark.jpeg",
@@ -28,6 +29,7 @@ const camera = new THREE.PerspectiveCamera(
   75, window.innerWidth / window.innerHeight, 0.1, 1000
 );
 camera.position.z = 20;
+
 
 const renderer = new THREE.WebGLRenderer({ canvas: document.querySelector('#bg') });
 renderer.setPixelRatio(window.devicePixelRatio);
@@ -43,6 +45,13 @@ window.addEventListener('resize', () => {
 /* OrbitControls allow for camera movement when the user clicks, drags, zooms, etc */
 const controls = new OrbitControls(camera, renderer.domElement);
 
+/* Set the camera to look at the center of the scene when the reset button is clicked */
+const initialCameraPos = camera.position.clone();
+const initialTarget = controls.target.clone();
+document.getElementById('resetButton').addEventListener('click', () => {
+    targetCameraPos = initialCameraPos.clone();
+    targetLookAt = initialTarget.clone();
+  });
 
 /* Pointlight adds depth and shadows from one direction, and ambient light helps us avoid total darkness */
 const pointLight = new THREE.PointLight(0xffffff, 1.5);
@@ -165,7 +174,8 @@ window.addEventListener('click', (event) => {
     3. Make the stars twinkle by adjusting their emissive intensity
     4. Make the "Ilakiya" text float up and down
     5. If the user clicks an image, move the camera and look at the image
-    6. Draw the scene with the camera
+    6. If the camera is close to the initial position, hide the reset button
+    7. Draw the scene with the camera
 */
 
 function animate() {
@@ -198,6 +208,13 @@ function animate() {
   }
 
   //6
+  if (targetCameraPos === null && camera.position.distanceTo(initialCameraPos) < 0.5) {
+    document.getElementById('resetButton').style.display = 'none';
+  } else {
+    document.getElementById('resetButton').style.display = 'block';
+  }
+
+  //7
   renderer.render(scene, camera);
 }
 
