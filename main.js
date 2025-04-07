@@ -12,7 +12,7 @@ let targetLookAt = null;
 const imageFilenames = [
     'images/shark.jpeg',
     'images/littleindia.jpeg',
-    // Add more images here
+    'images/sillyinbar.jpeg',
 ];
 
 const camera = new THREE.PerspectiveCamera(
@@ -62,22 +62,27 @@ function addStar() {
 Array(400).fill().forEach(addStar);
 
 function addImagePlane(url) {
-  const loader = new THREE.TextureLoader();
-
-  loader.load(url, (texture) => {
-    const geometry = new THREE.PlaneGeometry(8, 6);
-    const material = new THREE.MeshBasicMaterial({ map: texture, transparent: true });
-    const plane = new THREE.Mesh(geometry, material);
-
-    const spread = 300;
-    const [x, y, z] = Array(3).fill().map(() => THREE.MathUtils.randFloatSpread(spread));
-    plane.position.set(x, y, z);
-    plane.lookAt(0, 0, 0);
-
-    scene.add(plane);
-    clickablePlanes.push(plane);
-  });
-}
+    const loader = new THREE.TextureLoader();
+  
+    loader.load(url, (texture) => {
+      const imageAspect = texture.image.height / texture.image.width;
+      const baseWidth = 8;
+      const width = baseWidth;
+      const height = baseWidth * imageAspect;
+  
+      const geometry = new THREE.PlaneGeometry(width, height);
+      const material = new THREE.MeshBasicMaterial({ map: texture, transparent: true });
+      const plane = new THREE.Mesh(geometry, material);
+  
+      const spread = 300;
+      const [x, y, z] = Array(3).fill().map(() => THREE.MathUtils.randFloatSpread(spread));
+      plane.position.set(x, y, z);
+      plane.lookAt(0, 0, 0);
+  
+      scene.add(plane);
+      clickablePlanes.push(plane);
+    });
+  }
 
 let textMesh = null;
 
@@ -126,7 +131,7 @@ window.addEventListener('click', (event) => {
     // Fix direction: rotate 180 degrees to face the front of the plane
     const direction = new THREE.Vector3();
     target.getWorldDirection(direction);
-    const offset = direction.multiplyScalar(5);
+    const offset = direction.multiplyScalar(10);
 
     targetCameraPos = new THREE.Vector3().copy(target.position).add(offset);
     targetLookAt = new THREE.Vector3().copy(target.position);
