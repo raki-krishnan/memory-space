@@ -14,10 +14,14 @@ let targetCameraPos = null;
 let targetLookAt = null;
 
 const imageFilenames = [
-    'images/shark.jpeg',
-    'images/littleindia.jpeg',
-    'images/sillyinbar.jpeg',
-];
+    "images/aquarium.jpeg",
+    "images/canteen.jpeg",
+    "images/cheers.jpeg",
+    "images/littleindia.jpeg",
+    "images/mickeyds.jpeg",
+    "images/shark.jpeg",
+    "images/sillyinbar.jpeg"
+  ]
 
 /* Renderer draws the scene on the canvas */
 const camera = new THREE.PerspectiveCamera(
