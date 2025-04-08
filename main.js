@@ -21,23 +21,34 @@ let rotationSpeed = 0.0002;
 let rotationDirection = Math.random() < 0.5 ? 1 : -1;
 
 const imageFilenames = [
+  "images/anshdormparty.jpeg",
   "images/aquarium.jpeg",
   "images/aquariumselfie.jpeg",
   "images/aquariumstanding.jpeg",
   "images/aranscary.jpeg",
   "images/babycow.jpeg",
+  "images/bears.jpeg",
+  "images/birthdaycook.jpeg",
+  "images/blurrylivepicture.jpeg",
   "images/cafe.jpeg",
   "images/canteen.jpeg",
+  "images/carselfie.jpeg",
   "images/cheers.jpeg",
   "images/cidermill.jpeg",
   "images/colddate.jpeg",
   "images/colddate2.jpeg",
   "images/condado.jpeg",
+  "images/daveshotchicken.jpeg",
+  "images/detroit.jpeg",
   "images/elevator.jpeg",
+  "images/firstfrat.jpeg",
   "images/floormeal.jpeg",
+  "images/freshmanfootballgame.jpeg",
   "images/funnyselfie.jpeg",
   "images/gardens.jpeg",
+  "images/hahahahahablurrypicture.jpeg",
   "images/hajilane.jpeg",
+  "images/hat.jpeg",
   "images/icecream.jpeg",
   "images/iceskating.jpeg",
   "images/lineleap.jpeg",
@@ -46,16 +57,25 @@ const imageFilenames = [
   "images/mickeyds.jpeg",
   "images/monkeycostume.jpeg",
   "images/msubar.jpeg",
+  "images/namaste.jpeg",
   "images/nicephototypeshit.jpeg",
+  "images/outsiderocketfizz.jpeg",
+  "images/outsideross.jpeg",
   "images/photobooth.jpeg",
   "images/rainygame.jpeg",
+  "images/rakiluckyram.jpeg",
+  "images/rangnight.jpeg",
+  "images/redtoungues.jpeg",
   "images/rooftop.jpeg",
   "images/sentosa.jpeg",
   "images/shark.jpeg",
   "images/shreyaparty.jpeg",
   "images/sillyinbar.jpeg",
   "images/skeeps.jpeg",
+  "images/sleep.jpeg",
+  "images/snap.jpeg",
   "images/tailgate.jpeg",
+  "images/tailgate2.jpeg",
   "images/whitelie.jpeg",
   "images/zwestselfie.jpeg"
   ]
@@ -204,7 +224,7 @@ function addImagePlane(url) {
       const material = new THREE.MeshBasicMaterial({ map: texture, transparent: true });
       const plane = new THREE.Mesh(geometry, material);
   
-      const spread = 300;
+      const spread = 750;
       const [x, y, z] = Array(3).fill().map(() => THREE.MathUtils.randFloatSpread(spread));
       plane.position.set(x, y, z);
       plane.lookAt(0, 0, 0);
@@ -261,7 +281,6 @@ window.addEventListener('click', (event) => {
   if (intersects.length > 0) {
     const target = intersects[0].object;
 
-    // Fix direction: rotate 180 degrees to face the front of the plane
     const direction = new THREE.Vector3();
     target.getWorldDirection(direction);
     const offset = direction.multiplyScalar(10);
