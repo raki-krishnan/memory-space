@@ -11,6 +11,7 @@ const scene = new THREE.Scene();
 const rotatingGroup = new THREE.Group();
 scene.add(rotatingGroup);
 const twinklingStars = [];
+const shootingStars = [];
 const clickablePlanes = [];
 let targetCameraPos = null;
 let targetLookAt = null;
@@ -92,6 +93,41 @@ function addStar() {
 }
 
 Array(400).fill().forEach(addStar);
+
+/* Function to randomly spawn shooting stars */
+function spawnShootingStar() {
+  const geometry = new THREE.SphereGeometry(0.15, 8, 8);
+  const material = new THREE.MeshStandardMaterial({
+    color: 0xffffff,
+    emissive: 0xffffff,
+    emissiveIntensity: 3
+  });
+
+  const star = new THREE.Mesh(geometry, material);
+
+  const start = new THREE.Vector3(
+    THREE.MathUtils.randFloat(-500, 500),
+    THREE.MathUtils.randFloat(200, 300),
+    THREE.MathUtils.randFloat(-500, 500)
+  );
+
+  const end = start.clone().add(new THREE.Vector3(
+    THREE.MathUtils.randFloat(100, 300),
+    THREE.MathUtils.randFloat(-300, -400),
+    THREE.MathUtils.randFloat(-100, -200)
+  ));
+
+  star.position.copy(start);
+  scene.add(star);
+
+  shootingStars.push({
+    mesh: star,
+    start,
+    end,
+    progress: 0
+  });
+}
+
 
 
 /* Create a plane for each image and places these planes randomly in space*/
@@ -177,33 +213,57 @@ window.addEventListener('click', (event) => {
 
 /* Animation loop:
     1. Call animate on the next frame to create a loop
-    2. Update the orbit controls to keep the camera in sync with the mouse
-    3. Make the stars twinkle by adjusting their emissive intensity
-    4. Make the "Ilakiya" text float up and down
-    5. If the user clicks an image, move the camera and look at the image
-    6. If the camera is close to the initial position, hide the reset button
-    7. Rotate the group of stars and images
-    8. Draw the scene with the camera
+    2. Spawn a shooting star with a small probability
+    3. Update the orbit controls to keep the camera in sync with the mouse
+    4. Update the shooting stars' positions and remove them when they reach their end position
+    5. Make the stars twinkle by adjusting their emissive intensity
+    6. Make the "Ilakiya" text float up and down
+    7. If the user clicks an image, move the camera and look at the image
+    8. If the camera is close to the initial position, hide the reset button
+    9. Rotate the group of stars and images
+    10. Draw the scene with the camera
 */
 
 function animate() {
   //1
   requestAnimationFrame(animate);
+
   //2
-  controls.update();
+  if (Math.random() < 0.003) { 
+    spawnShootingStar();
+  }
 
   //3
+  controls.update();
+
+  //4
+  for (let i = shootingStars.length - 1; i >= 0; i--) {
+    const star = shootingStars[i];
+    star.progress += 0.01;
+
+    star.mesh.position.lerpVectors(star.start, star.end, star.progress);
+
+    star.mesh.material.emissiveIntensity = 3 * (1 - star.progress);
+
+    if (star.progress >= 1) {
+      scene.remove(star.mesh);
+      shootingStars.splice(i, 1);
+    }
+  }
+
+
+  //5
   const time = Date.now() * 0.003;
   twinklingStars.forEach(({ mesh, baseIntensity }, index) => {
     mesh.material.emissiveIntensity = baseIntensity + Math.sin(time + index) * 0.3;
   });
 
-  //4
+  //6
   if (textMesh) {
     textMesh.position.y = Math.sin(Date.now() * 0.001) * 0.5;
   }
 
-  //5
+  //7
   if (targetCameraPos && targetLookAt) {
     camera.position.lerp(targetCameraPos, 0.02);
     controls.target.lerp(targetLookAt, 0.02);
@@ -215,18 +275,18 @@ function animate() {
     }
   }
 
-  //6
+  //8
   if (targetCameraPos === null && camera.position.distanceTo(initialCameraPos) < 0.5) {
     document.getElementById('resetButton').style.display = 'none';
   } else {
     document.getElementById('resetButton').style.display = 'block';
   }
 
-  //7
+  //9
   rotatingGroup.rotation.x += 0.0002;
   rotatingGroup.rotation.y += 0.0002;
   
-  //8
+  //10
   renderer.render(scene, camera);
 }
 
