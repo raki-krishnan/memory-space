@@ -11,10 +11,14 @@ const scene = new THREE.Scene();
 const rotatingGroup = new THREE.Group();
 scene.add(rotatingGroup);
 const twinklingStars = [];
+let twinklingCoefficient = 0.003;
 const shootingStars = [];
 const clickablePlanes = [];
 let targetCameraPos = null;
 let targetLookAt = null;
+let chillMode = true;
+let rotationSpeed = 0.0002;
+let rotationDirection = Math.random() < 0.5 ? 1 : -1;
 
 const imageFilenames = [
     "images/aquarium.jpeg",
@@ -57,6 +61,35 @@ document.getElementById('resetButton').addEventListener('click', () => {
     targetCameraPos = initialCameraPos.clone();
     targetLookAt = initialTarget.clone();
   });
+
+/* Add event listener to handle clicks on the toggle button */
+document.getElementById('chilltogglecontainer').addEventListener('click', () => {
+  chillMode = !chillMode;
+
+  const circle = document.getElementById('chilltogglecircle');
+  const container = document.getElementById('chilltogglecontainer');
+
+  if (chillMode) {
+    rotationSpeed = 0.0002;
+    twinklingCoefficient = 0.003;
+    rotationDirection = Math.random() < 0.5 ? 1 : -1;
+    circle.style.left = '3px';
+    circle.textContent = '✨';
+
+    container.style.background = 'rgba(173, 216, 230, 0.7)';
+    circle.style.background = 'rgba(135, 206, 250, 0.7)';
+  } else {
+    rotationSpeed = 0.0015;
+    twinklingCoefficient = 0.008;
+    rotationDirection = Math.random() < 0.5 ? 1 : -1;
+    circle.style.left = '31px';
+    circle.textContent = '🔥';
+
+    container.style.background = 'rgba(255, 165, 0, 0.7)';
+    circle.style.background = 'rgba(255, 140, 0, 0.7)';
+  }
+});
+
 
 /* Pointlight adds depth and shadows from one direction, and ambient light helps us avoid total darkness */
 const pointLight = new THREE.PointLight(0xffffff, 1.5);
@@ -178,9 +211,9 @@ loader.load('https://threejs.org/examples/fonts/optimer_regular.typeface.json', 
 
   textMesh = new THREE.Mesh(textGeometry, textMaterial);
   textGeometry.computeBoundingBox();
-
-  const centerOffset = (textGeometry.boundingBox.max.x - textGeometry.boundingBox.min.x) / 2;
-  textMesh.position.set(-centerOffset, 0, 0);
+  const centerOffsetX = -(textGeometry.boundingBox.max.x - textGeometry.boundingBox.min.x) / 2;
+  const centerOffsetY = -(textGeometry.boundingBox.max.y - textGeometry.boundingBox.min.y) / 2;
+  textMesh.position.set(centerOffsetX, centerOffsetY, 0);
 
   scene.add(textMesh);
   imageFilenames.forEach(addImagePlane);
@@ -220,8 +253,9 @@ window.addEventListener('click', (event) => {
     6. Make the "Ilakiya" text float up and down
     7. If the user clicks an image, move the camera and look at the image
     8. If the camera is close to the initial position, hide the reset button
-    9. Rotate the group of stars and images
-    10. Draw the scene with the camera
+    9. Display the toggle button to switch between modes
+    10. Rotate the group of stars based
+    11. Draw the scene with the camera
 */
 
 function animate() {
@@ -253,7 +287,7 @@ function animate() {
 
 
   //5
-  const time = Date.now() * 0.003;
+  const time = Date.now() * twinklingCoefficient;
   twinklingStars.forEach(({ mesh, baseIntensity }, index) => {
     mesh.material.emissiveIntensity = baseIntensity + Math.sin(time + index) * 0.3;
   });
@@ -276,17 +310,20 @@ function animate() {
   }
 
   //8
-  if (targetCameraPos === null && camera.position.distanceTo(initialCameraPos) < 0.5) {
-    document.getElementById('resetButton').style.display = 'none';
-  } else {
+  if (camera.position.distanceTo(initialCameraPos) > 0.5) {
     document.getElementById('resetButton').style.display = 'block';
+  } else {
+    document.getElementById('resetButton').style.display = 'none';
   }
 
   //9
-  rotatingGroup.rotation.x += 0.0002;
-  rotatingGroup.rotation.y += 0.0002;
-  
+  document.getElementById('chilltogglecircle').style.display = 'block';
+
   //10
+  rotatingGroup.rotation.x += (rotationDirection * rotationSpeed);
+  rotatingGroup.rotation.y += (rotationDirection * rotationSpeed);
+  
+  //11
   renderer.render(scene, camera);
 }
 
