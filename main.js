@@ -8,6 +8,8 @@ import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
 
 /* Constants to set up the 3D scene with stars, images, and camera animation*/
 const scene = new THREE.Scene();
+const rotatingGroup = new THREE.Group();
+scene.add(rotatingGroup);
 const twinklingStars = [];
 const clickablePlanes = [];
 let targetCameraPos = null;
@@ -18,8 +20,10 @@ const imageFilenames = [
     "images/canteen.jpeg",
     "images/cheers.jpeg",
     "images/gardens.jpeg",
+    "images/hajilane.jpeg",
     "images/littleindia.jpeg",
     "images/mickeyds.jpeg",
+    "images/msubar.jpeg",
     "images/shark.jpeg",
     "images/sillyinbar.jpeg"
   ]
@@ -64,7 +68,9 @@ scene.add(ambientLight);
 
 /* Create the stars with random colors, sizes, and positions */
 function addStar() {
-  const geometry = new THREE.SphereGeometry(0.2, 12, 12);
+    
+  const radius = THREE.MathUtils.randFloat(0.5, 0.75);
+  const geometry = new THREE.SphereGeometry(radius, 12, 12);
   const starColors = [0xffffff, 0xfff0a5, 0xa5cfff, 0xffb3f3];
   const color = starColors[Math.floor(Math.random() * starColors.length)];
 
@@ -75,10 +81,12 @@ function addStar() {
   });
 
   const star = new THREE.Mesh(geometry, material);
-  const spread = 300;
+  //spread is the range of random positions for the stars
+  const spread = 900;
   const [x, y, z] = Array(3).fill().map(() => THREE.MathUtils.randFloatSpread(spread));
   star.position.set(x, y, z);
-  scene.add(star);
+  rotatingGroup.add(star);
+
 
   twinklingStars.push({ mesh: star, baseIntensity: material.emissiveIntensity });
 }
@@ -113,7 +121,6 @@ function addImagePlane(url) {
 let textMesh = null;
 
 /* Load the font and create the text mesh "Ilakiya" */
-
 const loader = new FontLoader();
 loader.load('https://threejs.org/examples/fonts/optimer_regular.typeface.json', function (font) {
   const textGeometry = new TextGeometry('Ilakiya', {
@@ -175,7 +182,8 @@ window.addEventListener('click', (event) => {
     4. Make the "Ilakiya" text float up and down
     5. If the user clicks an image, move the camera and look at the image
     6. If the camera is close to the initial position, hide the reset button
-    7. Draw the scene with the camera
+    7. Rotate the group of stars and images
+    8. Draw the scene with the camera
 */
 
 function animate() {
@@ -185,7 +193,7 @@ function animate() {
   controls.update();
 
   //3
-  const time = Date.now() * 0.002;
+  const time = Date.now() * 0.003;
   twinklingStars.forEach(({ mesh, baseIntensity }, index) => {
     mesh.material.emissiveIntensity = baseIntensity + Math.sin(time + index) * 0.3;
   });
@@ -215,6 +223,10 @@ function animate() {
   }
 
   //7
+  rotatingGroup.rotation.x += 0.0002;
+  rotatingGroup.rotation.y += 0.0002;
+  
+  //8
   renderer.render(scene, camera);
 }
 
