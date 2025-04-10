@@ -138,6 +138,18 @@ document.getElementById('chilltogglecontainer').addEventListener('click', () => 
 });
 
 
+/* Add event listener for shuffle button */
+document.getElementById('shuffle').addEventListener('click', () => {
+  if (clickablePlanes.length === 0) return;
+  const target = clickablePlanes[Math.floor(Math.random() * clickablePlanes.length)];
+  const direction = new THREE.Vector3();
+  target.getWorldDirection(direction);
+  const offset = direction.multiplyScalar(10);
+  targetCameraPos = new THREE.Vector3().copy(target.position).add(offset);
+  targetLookAt = new THREE.Vector3().copy(target.position);
+});
+
+
 /* Pointlight adds depth and shadows from one direction, and ambient light helps us avoid total darkness */
 const pointLight = new THREE.PointLight(0xffffff, 1.5);
 pointLight.position.set(5, 5, 5);

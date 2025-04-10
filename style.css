@@ -46,13 +46,13 @@ canvas {
     transition: background 0.3s ease;
 }
 
-  #chilltoggletrack {
+#chilltoggletrack {
     width: 100%;
     height: 100%;
     position: relative;
-  }
+}
   
-  #chilltogglecircle {
+#chilltogglecircle {
     width: 26px;
     height: 26px;
     background: rgba(135, 206, 250, 0.7);
@@ -67,5 +67,29 @@ canvas {
     left: 3px;
     transition: all 0.3s ease;
     padding-top: 1px;
-  }
+}
   
+#shuffle{
+    position: absolute;
+    top: 20px;
+    left: 90px;
+    background: rgba(255, 255, 255, 0.7);
+    height: 32px;
+    width: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    padding: 8px 12px;
+    font-size: 18px;
+    font-family: sans-serif;
+    border-radius: 6px;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    z-index: 100;
+    transition: background 0.3s ease;
+}
+#shuffle:hover {
+  background: white;
+  opacity: 0.75;
+}
