@@ -115,6 +115,7 @@ document.getElementById('chilltogglecontainer').addEventListener('click', () => 
 
   const circle = document.getElementById('chilltogglecircle');
   const container = document.getElementById('chilltogglecontainer');
+  const shuffleButton = document.getElementById('shuffle');
 
   if (chillMode) {
     rotationSpeed = 0.0002;
@@ -123,6 +124,7 @@ document.getElementById('chilltogglecontainer').addEventListener('click', () => 
     circle.style.left = '3px';
     circle.textContent = '✨';
 
+    shuffleButton.style.background = 'rgba(173, 216, 230, 0.7)';
     container.style.background = 'rgba(173, 216, 230, 0.7)';
     circle.style.background = 'rgba(135, 206, 250, 0.7)';
   } else {
@@ -132,6 +134,7 @@ document.getElementById('chilltogglecontainer').addEventListener('click', () => 
     circle.style.left = '31px';
     circle.textContent = '🔥';
 
+    shuffleButton.style.background = 'rgba(255, 165, 0, 0.7)';
     container.style.background = 'rgba(255, 165, 0, 0.7)';
     circle.style.background = 'rgba(255, 140, 0, 0.7)';
   }
