@@ -58,7 +58,7 @@ canvas {
     background: rgba(135, 206, 250, 0.7);
     border-radius: 50%;
     font-size: 16px;
-    display: flex;
+    /* display: flex; */
     align-items: center;
     justify-content: center;
     text-align: center;
@@ -92,4 +92,68 @@ canvas {
 #shuffle:hover {
   background: white;
   opacity: 0.75;
+}
+
+#presentation{
+    position: absolute;
+    top: 20px;
+    left: 132px;
+    background: rgba(173, 216, 230, 0.7);
+    height: 32px;
+    width: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    padding: 8px 12px;
+    font-size: 18px;
+    font-family: sans-serif;
+    border-radius: 6px;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    z-index: 100;
+    transition: background 0.3s ease;
+}
+#presentation:hover {
+  background: white;
+  opacity: 0.75;
+}
+
+.hidden {
+    display: none;
+}
+  
+#presentationScreen {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+#presentationScreen.show {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+  
+#presentationOverlay {
+    text-align: center;
+}
+  
+#presentationOverlay h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+.songChoice {
+    background: white;
+    border: none;
+    padding: 12px 20px;
+    margin: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 8px;
 }

@@ -20,6 +20,7 @@ let chillMode = true;
 let rotationSpeed = 0.0002;
 let rotationDirection = Math.random() < 0.5 ? 1 : -1;
 
+
 const imageFilenames = [
   "images/anshdormparty.jpeg",
   "images/aquarium.jpeg",
@@ -80,6 +81,11 @@ const imageFilenames = [
   "images/zwestselfie.jpeg"
   ]
 
+
+let imagesLoaded = 0;
+const totalImages = imageFilenames.length;
+let readyForPresentation = false;
+
 /* Renderer draws the scene on the canvas */
 const camera = new THREE.PerspectiveCamera(
   75, window.innerWidth / window.innerHeight, 0.1, 1000
@@ -105,9 +111,17 @@ const controls = new OrbitControls(camera, renderer.domElement);
 const initialCameraPos = camera.position.clone();
 const initialTarget = controls.target.clone();
 document.getElementById('resetButton').addEventListener('click', () => {
-    targetCameraPos = initialCameraPos.clone();
-    targetLookAt = initialTarget.clone();
-  });
+  isPresenting = false;
+  presentationQueue = [];
+
+  // Stop music if playing
+  if (presentationAudio) {
+    presentationAudio.pause();
+    presentationAudio.currentTime = 0;
+  }
+  targetCameraPos = initialCameraPos.clone();
+  targetLookAt = initialTarget.clone();
+});
 
 /* Add event listener to handle clicks on the toggle button */
 document.getElementById('chilltogglecontainer').addEventListener('click', () => {
@@ -116,6 +130,7 @@ document.getElementById('chilltogglecontainer').addEventListener('click', () => 
   const circle = document.getElementById('chilltogglecircle');
   const container = document.getElementById('chilltogglecontainer');
   const shuffleButton = document.getElementById('shuffle');
+  const presentationButton = document.getElementById('presentation');
 
   if (chillMode) {
     rotationSpeed = 0.0002;
@@ -127,16 +142,19 @@ document.getElementById('chilltogglecontainer').addEventListener('click', () => 
     shuffleButton.style.background = 'rgba(173, 216, 230, 0.7)';
     container.style.background = 'rgba(173, 216, 230, 0.7)';
     circle.style.background = 'rgba(135, 206, 250, 0.7)';
-  } else {
+    presentationButton.style.background = 'rgba(173, 216, 230, 0.7)';
+  } 
+  else {
     rotationSpeed = 0.0015;
     twinklingCoefficient = 0.008;
     rotationDirection = Math.random() < 0.5 ? 1 : -1;
     circle.style.left = '31px';
-    circle.textContent = '🔥';
+    circle.textContent = '🪩';
 
     shuffleButton.style.background = 'rgba(255, 165, 0, 0.7)';
     container.style.background = 'rgba(255, 165, 0, 0.7)';
     circle.style.background = 'rgba(255, 140, 0, 0.7)';
+    presentationButton.style.background = 'rgba(255, 165, 0, 0.7)';
   }
 });
 
@@ -151,6 +169,74 @@ document.getElementById('shuffle').addEventListener('click', () => {
   targetCameraPos = new THREE.Vector3().copy(target.position).add(offset);
   targetLookAt = new THREE.Vector3().copy(target.position);
 });
+
+
+/* Add event listener for presentation button */
+const presentationScreen = document.getElementById('presentationScreen');
+document.getElementById('presentation').addEventListener('click', () => {
+  presentationScreen.classList.remove('hidden');
+});
+
+/* logic for presentation mode */
+let presentationAudio = null;
+let presentationQueue = [];
+let isPresenting = false;
+
+document.querySelectorAll('.songChoice').forEach(button => {
+  button.addEventListener('click', () => {
+    const songSrc = button.dataset.src;
+    presentationScreen.classList.add('hidden');
+
+    if (presentationAudio) presentationAudio.pause();
+    presentationAudio = new Audio(songSrc);
+    presentationAudio.loop = true;
+    presentationAudio.play();
+
+    const waitUntilReady = () => {
+      if (readyForPresentation) {
+        startPresentationMode();
+      } else {
+        setTimeout(waitUntilReady, 100);
+      }
+    };
+  
+    waitUntilReady();
+    presentationScreen.classList.add('hidden');
+  });
+});
+
+function startPresentationMode() {
+  if (clickablePlanes.length === 0) return;
+
+  // Create shuffled queue of image planes
+  presentationQueue = [...clickablePlanes];
+  for (let i = presentationQueue.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [presentationQueue[i], presentationQueue[j]] = [presentationQueue[j], presentationQueue[i]];
+  }
+
+  isPresenting = true;
+  goToNextImage();
+}
+
+function goToNextImage() {
+  if (!isPresenting || presentationQueue.length === 0) {
+    isPresenting = false;
+    return;
+  }
+
+  const target = presentationQueue.shift();
+
+  const direction = new THREE.Vector3();
+  target.getWorldDirection(direction);
+  const offset = direction.multiplyScalar(10);
+
+  targetCameraPos = new THREE.Vector3().copy(target.position).add(offset);
+  targetLookAt = new THREE.Vector3().copy(target.position);
+
+  // Wait ~3.5 seconds then go to next
+  setTimeout(goToNextImage, 7000);
+}
 
 
 /* Pointlight adds depth and shadows from one direction, and ambient light helps us avoid total darkness */
@@ -246,6 +332,12 @@ function addImagePlane(url) {
   
       scene.add(plane);
       clickablePlanes.push(plane);
+      scene.add(plane);
+
+      imagesLoaded++;
+      if (imagesLoaded === totalImages) {
+        readyForPresentation = true;
+      }
     });
   }
 
