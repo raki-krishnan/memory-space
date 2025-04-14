@@ -26,16 +26,46 @@
       <div id="chilltogglecircle">✨</div>
     </div>
   </div>
-  <button id="shuffle">🔀</button>
+  <button id="shuffle">🎲</button>
   <button id="presentation">▶️</button>
   <div id="presentationScreen" class="hidden">
     <div id="presentationOverlay">
+      <button class="escape" id="presentationClose">esc</button>
       <h2>Choose a Song 🎵</h2>
-      <button class="songChoice" data-src="music/song1.mp3">Song 1</button>
-      <button class="songChoice" data-src="music/song2.mp3">Song 2</button>
-      <button class="songChoice" data-src="music/song3.mp3">Song 3</button>
+      <div id="songList">
+        <button class="songChoice" data-src="music/all-the-stars.mp3">
+          <img src="album-covers/blackpanther.png" class="albumCover" alt="All The Stars" />
+          <span>All The Stars</span>
+        </button>
+      
+        <button class="songChoice" data-src="music/a-sky-full-of-stars.mp3">
+          <img src="album-covers/ghost-stories.png" class="albumCover" alt="A Sky Full of Stars" />
+          <span>A Sky Full of Stars</span>
+        </button>
+      
+        <button class="songChoice" data-src="music/song3.mp3">
+          <img src="album-covers/blackpanther.png" class="albumCover" alt="All I Need To Hear" />
+          <span>All I Need To Hear</span>
+        </button>
+      
+        <button class="songChoice" data-src="music/skeletons.mp3">
+          <img src="album-covers/astroworld.png" class="albumCover" alt="Skeletons" />
+          <span>Skeletons</span>
+        </button>
+
+        <button class="songChoice" data-src="music/8Teen.mp3">
+          <img src="album-covers/american-teen.png" class="albumCover" alt="8Teen" />
+          <span>8Teen</span>
+        </button>
+
+        <button class="songChoice" data-src="music/airplanes.mp3">
+          <img src="album-covers/BoB.png" class="albumCover" alt="airplanes" />
+          <span>Airplanes</span>
+        </button>
+      </div>  
     </div>
   </div>
+  <button id="skip">⏩</button>
 </body>
 </html>
 

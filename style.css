@@ -27,7 +27,14 @@ canvas {
     background: white;
     opacity: 0.75;
 }
-  
+
+.chill-button {
+    background: rgba(173, 216, 230, 0.7);
+}
+.exciting-button {
+    background: rgba(255, 165, 0, 0.7);
+}
+
 #chilltogglecontainer {
     position: absolute;
     top: 20px;
@@ -148,12 +155,81 @@ canvas {
     margin-bottom: 20px;
 }
 
-.songChoice {
-    background: white;
-    border: none;
-    padding: 12px 20px;
-    margin: 10px;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 8px;
+#songList {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    margin-top: 20px;
 }
+  
+.songChoice {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 16px;
+    padding: 10px 16px;
+    border: none;
+    background: white;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    transition: background 0.3s, transform 0.2s;
+}
+  
+.songChoice:hover {
+    background: #eee;
+    transform: translateY(-2px);
+}
+  
+.songChoice .albumCover {
+    width: 40px;
+    height: 40px;
+    border-radius: 6px;
+    object-fit: cover;
+}
+
+
+.escape {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: rgba(255, 255, 255, 0.85);
+    border: none;
+    padding: 6px 10px;
+    font-size: 18px;
+    border-radius: 6px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    z-index: 1001;
+}
+  
+.escape:hover {
+    background: white;
+}
+
+#skip{
+    position: absolute;
+    top: 20px;
+    left: 174px;
+    background: rgba(173, 216, 230, 0.7);
+    height: 32px;
+    width: 32px;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    padding: 8px 12px;
+    font-size: 18px;
+    font-family: sans-serif;
+    border-radius: 6px;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    z-index: 100;
+    transition: background 0.3s ease;
+    display: none;
+}
+
+#skip:hover {
+    background: white;
+    opacity: 0.75;
+  }

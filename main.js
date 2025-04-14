@@ -121,6 +121,8 @@ document.getElementById('resetButton').addEventListener('click', () => {
   }
   targetCameraPos = initialCameraPos.clone();
   targetLookAt = initialTarget.clone();
+  document.getElementById('skip').style.display = 'none';
+
 });
 
 /* Add event listener to handle clicks on the toggle button */
@@ -131,6 +133,7 @@ document.getElementById('chilltogglecontainer').addEventListener('click', () => 
   const container = document.getElementById('chilltogglecontainer');
   const shuffleButton = document.getElementById('shuffle');
   const presentationButton = document.getElementById('presentation');
+  const skipButton = document.getElementById('skip');
 
   if (chillMode) {
     rotationSpeed = 0.0002;
@@ -143,6 +146,7 @@ document.getElementById('chilltogglecontainer').addEventListener('click', () => 
     container.style.background = 'rgba(173, 216, 230, 0.7)';
     circle.style.background = 'rgba(135, 206, 250, 0.7)';
     presentationButton.style.background = 'rgba(173, 216, 230, 0.7)';
+    skipButton.style.background = 'rgba(173, 216, 230, 0.7)';
   } 
   else {
     rotationSpeed = 0.0015;
@@ -155,6 +159,7 @@ document.getElementById('chilltogglecontainer').addEventListener('click', () => 
     container.style.background = 'rgba(255, 165, 0, 0.7)';
     circle.style.background = 'rgba(255, 140, 0, 0.7)';
     presentationButton.style.background = 'rgba(255, 165, 0, 0.7)';
+    skipButton.style.background = 'rgba(255, 165, 0, 0.7)';
   }
 });
 
@@ -170,9 +175,21 @@ document.getElementById('shuffle').addEventListener('click', () => {
   targetLookAt = new THREE.Vector3().copy(target.position);
 });
 
+/* Add event listener for presentation close button */
+const presentationScreen = document.getElementById("presentationScreen");
+const presentationClose = document.getElementById("presentationClose");
+presentationClose.addEventListener("click", () => {
+  presentationScreen.classList.add("hidden");
+  presentationScreen.classList.remove("show");
+});
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape') {
+    presentationScreen.classList.add('hidden');
+    presentationScreen.classList.remove('show');
+  }
+});
 
 /* Add event listener for presentation button */
-const presentationScreen = document.getElementById('presentationScreen');
 document.getElementById('presentation').addEventListener('click', () => {
   presentationScreen.classList.remove('hidden');
 });
@@ -208,6 +225,9 @@ document.querySelectorAll('.songChoice').forEach(button => {
 function startPresentationMode() {
   if (clickablePlanes.length === 0) return;
 
+  //first return to initial position
+  targetCameraPos = initialCameraPos.clone();
+  targetLookAt = initialTarget.clone();
   // Create shuffled queue of image planes
   presentationQueue = [...clickablePlanes];
   for (let i = presentationQueue.length - 1; i > 0; i--) {
@@ -216,6 +236,7 @@ function startPresentationMode() {
   }
 
   isPresenting = true;
+  document.getElementById('skip').style.display = 'flex';
   goToNextImage();
 }
 
