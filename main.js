@@ -255,8 +255,8 @@ function goToNextImage() {
   targetCameraPos = new THREE.Vector3().copy(target.position).add(offset);
   targetLookAt = new THREE.Vector3().copy(target.position);
 
-  // Wait ~3.5 seconds then go to next
-  setTimeout(goToNextImage, 7000);
+  // Wait ~10 seconds then go to next
+  setTimeout(goToNextImage, 11000);
 }
 
 
@@ -473,8 +473,20 @@ function animate() {
 
   //7
   if (targetCameraPos && targetLookAt) {
-    camera.position.lerp(targetCameraPos, 0.02);
-    controls.target.lerp(targetLookAt, 0.02);
+    let lerpSpeed = isPresenting ? 0.01 : 0.02;
+    // camera.position.lerp(targetCameraPos, lerpSpeed);
+    // controls.target.lerp(targetLookAt, lerpSpeed);
+    camera.position.set(
+      THREE.MathUtils.lerp(camera.position.x, targetCameraPos.x, lerpSpeed),
+      THREE.MathUtils.lerp(camera.position.y, targetCameraPos.y, lerpSpeed),
+      THREE.MathUtils.lerp(camera.position.z, targetCameraPos.z, lerpSpeed)
+    );
+  
+    controls.target.set(
+      THREE.MathUtils.lerp(controls.target.x, targetLookAt.x, lerpSpeed),
+      THREE.MathUtils.lerp(controls.target.y, targetLookAt.y, lerpSpeed),
+      THREE.MathUtils.lerp(controls.target.z, targetLookAt.z, lerpSpeed)
+    );
     controls.update();
 
     if (camera.position.distanceTo(targetCameraPos) < 0.1) {
