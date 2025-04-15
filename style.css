@@ -162,6 +162,21 @@ canvas {
     gap: 16px;
     margin-top: 20px;
 }
+
+#songGrid {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+  
+.songColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 250px;
+}
   
 .songChoice {
     position: relative;
@@ -254,3 +269,22 @@ canvas {
     pointer-events: none;
     transition: background 0.3s ease;
 }
+
+.start-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.85);
+    opacity: .85;
+    border: none;
+    padding: 6px 10px;
+    font-size: 18px;
+    border-radius: 6px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    z-index: 1001;
+  }
+  
+  .start-button:hover {
+    background: #ff99dd;
+  }

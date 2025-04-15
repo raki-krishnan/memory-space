@@ -31,53 +31,102 @@
   <div id="presentationScreen" class="hidden">
     <div id="presentationOverlay">
       <button class="escape" id="presentationClose">esc</button>
-      <h2>Choose Three Songs 🎵</h2>
-      <div id="songList">
-        <button class="songChoice" data-src="music/all-the-stars.mp3">
-          <img src="album-covers/blackpanther.png" class="albumCover" alt="All The Stars" />
-          <span>All The Stars</span>
-        </button>
-      
-        <button class="songChoice" data-src="music/a-sky-full-of-stars.mp3">
-          <img src="album-covers/ghost-stories.png" class="albumCover" alt="A Sky Full of Stars" />
-          <span>A Sky Full of Stars</span>
-        </button>
-      
-        <button class="songChoice" data-src="music/skeletons.mp3">
-          <img src="album-covers/astroworld.png" class="albumCover" alt="Skeletons" />
-          <span>Skeletons</span>
-        </button>
-
-        <button class="songChoice" data-src="music/8Teen.mp3">
-          <img src="album-covers/american-teen.png" class="albumCover" alt="8Teen" />
-          <span>8Teen</span>
-        </button>
-
-        <button class="songChoice" data-src="music/airplanes.mp3">
-          <img src="album-covers/BoB.png" class="albumCover" alt="airplanes" />
-          <span>Airplanes</span>
-        </button>
-
-        <button class="songChoice" data-src="music/passionfruit.mp3">
-          <img src="album-covers/morelife.png" class="albumCover" alt="passionfruit" />
-          <span>Passionfruit</span>
-        </button>
-
-        <button class="songChoice" data-src="music/fireflies.mp3">
-          <img src="album-covers/oceaneyes.png" class="albumCover" alt="fireflies" />
-          <span>Fireflies</span>
-        </button>
-
-        <button class="songChoice" data-src="music/notearslefttocry.mp3">
-          <img src="album-covers/sweetener.png" class="albumCover" alt="notearslefttocry" />
-          <span>No Tears Left to Cry</span>
-        </button>
-
-        <button class="songChoice" data-src="music/nightchanges.mp3">
-          <img src="album-covers/four.png" class="albumCover" alt="nightchanges" />
-          <span>Night Changes</span>
-        </button>
-      </div>  
+      <button id="startPresentation" class="start-button hidden">Start Presentation</button>
+      <h2>Queue Some Songs 🎵</h2>
+      <div id="songGrid">
+        <div class="songColumn">
+          <button class="songChoice" data-src="music/all-the-stars.mp3">
+            <img src="album-covers/blackpanther.png" class="albumCover" alt="All The Stars" />
+            <span>All The Stars</span>
+          </button>
+        
+          <button class="songChoice" data-src="music/a-sky-full-of-stars.mp3">
+            <img src="album-covers/ghost-stories.png" class="albumCover" alt="A Sky Full of Stars" />
+            <span>A Sky Full of Stars</span>
+          </button>
+        
+          <button class="songChoice" data-src="music/skeletons.mp3">
+            <img src="album-covers/astroworld.png" class="albumCover" alt="Skeletons" />
+            <span>Skeletons</span>
+          </button>
+  
+          <button class="songChoice" data-src="music/8Teen.mp3">
+            <img src="album-covers/american-teen.png" class="albumCover" alt="8Teen" />
+            <span>8Teen</span>
+          </button>
+  
+          <button class="songChoice" data-src="music/airplanes.mp3">
+            <img src="album-covers/BoB.png" class="albumCover" alt="airplanes" />
+            <span>Airplanes</span>
+          </button>
+  
+          <button class="songChoice" data-src="music/passionfruit.mp3">
+            <img src="album-covers/morelife.png" class="albumCover" alt="passionfruit" />
+            <span>Passionfruit</span>
+          </button>
+  
+          <button class="songChoice" data-src="music/fireflies.mp3">
+            <img src="album-covers/oceaneyes.png" class="albumCover" alt="fireflies" />
+            <span>Fireflies</span>
+          </button>
+  
+          <button class="songChoice" data-src="music/notearslefttocry.mp3">
+            <img src="album-covers/sweetener.png" class="albumCover" alt="notearslefttocry" />
+            <span>No Tears Left to Cry</span>
+          </button>
+  
+          <button class="songChoice" data-src="music/nightchanges.mp3">
+            <img src="album-covers/four.png" class="albumCover" alt="nightchanges" />
+            <span>Night Changes</span>
+          </button>
+        </div>  
+        <div class="songColumn">
+          <button class="songChoice" data-src="music/telekinesis.mp3">
+            <img src="album-covers/utopia.png" class="albumCover" alt="Telekinesis" />
+            <span>Telekinesis</span>
+          </button>
+        
+          <button class="songChoice" data-src="music/ivy.mp3">
+            <img src="album-covers/blond.png" class="albumCover" alt="Ivy" />
+            <span>Ivy</span>
+          </button>
+        
+          <button class="songChoice" data-src="music/pinkwhite.mp3">
+            <img src="album-covers/blond.png" class="albumCover" alt="Pink + White" />
+            <span>Pink + White</span>
+          </button>
+  
+          <button class="songChoice" data-src="music/patience.mp3">
+            <img src="album-covers/pinktape.png" class="albumCover" alt="Patience" />
+            <span>Patience</span>
+          </button>
+  
+          <button class="songChoice" data-src="music/location.mp3">
+            <img src="album-covers/playboicarti.png" class="albumCover" alt="Location" />
+            <span>Location</span>
+          </button>
+  
+          <button class="songChoice" data-src="music/diamonds.mp3">
+            <img src="album-covers/diamonds.png" class="albumCover" alt="Diamonds" />
+            <span>Diamonds</span>
+          </button>
+  
+          <button class="songChoice" data-src="music/payphone.mp3">
+            <img src="album-covers/overexposed.png" class="albumCover" alt="Payphone" />
+            <span>Payphone</span>
+          </button>
+  
+          <button class="songChoice" data-src="music/snooze.mp3">
+            <img src="album-covers/sos.png" class="albumCover" alt="Snooze" />
+            <span>Snooze</span>
+          </button>
+  
+          <button class="songChoice" data-src="music/openarms.mp3">
+            <img src="album-covers/sos.png" class="albumCover" alt="Open Arms" />
+            <span>Open Arms</span>
+          </button>
+        </div>  
+      </div>
     </div>
   </div>
   <button id="skip">⏩</button>

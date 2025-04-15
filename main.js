@@ -136,7 +136,7 @@ document.getElementById('resetButton').addEventListener('click', () => {
   targetCameraPos = initialCameraPos.clone();
   targetLookAt = initialTarget.clone();
   document.getElementById('skip').style.display = 'none';
-
+  document.getElementById('startPresentation').classList.add('hidden');
 });
 
 /* Add event listener to handle clicks on the toggle button */
@@ -201,6 +201,47 @@ document.addEventListener('keydown', (event) => {
     presentationScreen.classList.add('hidden');
     presentationScreen.classList.remove('show');
   }
+  else if (event.key === 'Enter') {
+    presentationScreen.classList.add('hidden');
+    presentationScreen.classList.remove('show');
+
+    currentSongIndex = 0;
+    presentationAudio = new Audio(selectedSongs[currentSongIndex]);
+    presentationAudio.play();
+    presentationAudio.addEventListener('ended', () => {
+      playNextSongInQueue();
+    });
+
+    const waitUntilReady = () => {
+      if (readyForPresentation) {
+        startPresentationMode();
+      } else {
+        setTimeout(waitUntilReady, 100);
+      }
+    };
+    waitUntilReady();
+  }
+});
+
+/* Add event listener for presentation start button */
+document.getElementById('startPresentation').addEventListener('click', () => {
+  document.getElementById('presentationScreen').classList.add('hidden');
+
+  currentSongIndex = 0;
+  presentationAudio = new Audio(selectedSongs[currentSongIndex]);
+  presentationAudio.play();
+  presentationAudio.addEventListener('ended', () => {
+    playNextSongInQueue();
+  });
+
+  const waitUntilReady = () => {
+    if (readyForPresentation) {
+      startPresentationMode();
+    } else {
+      setTimeout(waitUntilReady, 100);
+    }
+  };
+  waitUntilReady();
 });
 
 /* Add event listener for presentation button */
@@ -227,6 +268,7 @@ document.getElementById('presentation').addEventListener('click', () => {
     document.getElementById('skip').style.display = 'none';
   }
   presentationScreen.classList.remove('hidden');
+  document.getElementById('startPresentation').classList.remove('hidden');
 });
 
 /* logic for presentation mode */
@@ -267,12 +309,12 @@ songButtons.forEach(button => {
       selectedSongs.splice(index, 1);
       selectedButtons.splice(index, 1);
       updateSongLabels();
-    } else if (selectedSongs.length < 3) {
+    } else if (selectedSongs.length < 18) {
       selectedSongs.push(songSrc);
       selectedButtons.push(button);
       updateSongLabels();
 
-      if (selectedSongs.length === 3) {
+      if (selectedSongs.length === 18) {
         // Hide the menu and start presentation after short delay
         setTimeout(() => {
           document.getElementById('presentationScreen').classList.add('hidden');
