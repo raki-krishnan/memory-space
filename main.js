@@ -34,6 +34,7 @@ const imageFilenames = [
   "images/aquariumstanding.jpeg",
   "images/aranscary.jpeg",
   "images/babycow.jpeg",
+  "images/bdubs.jpeg",
   "images/bears.jpeg",
   "images/birthdaycook.jpeg",
   "images/blurrylivepicture.jpeg",
@@ -44,48 +45,68 @@ const imageFilenames = [
   "images/cidermill.jpeg",
   "images/colddate.jpeg",
   "images/colddate2.jpeg",
+  "images/colddate3.jpeg",
   "images/condado.jpeg",
+  "images/cornfield.jpeg",
   "images/daveshotchicken.jpeg",
   "images/detroit.jpeg",
   "images/elevator.jpeg",
   "images/firstfrat.jpeg",
+  "images/firstmeeting.jpeg",
   "images/floormeal.jpeg",
   "images/freshmanfootballgame.jpeg",
   "images/funnyselfie.jpeg",
   "images/gardens.jpeg",
+  "images/glasses.jpeg",
   "images/hahahahahablurrypicture.jpeg",
   "images/hajilane.jpeg",
   "images/hat.jpeg",
   "images/icecream.jpeg",
   "images/iceskating.jpeg",
+  "images/inthecar.jpeg",
+  "images/joes.jpeg",
+  "images/kinesebereal.jpeg",
   "images/lineleap.jpeg",
   "images/littleindia.jpeg",
   "images/livebar.jpeg",
+  "images/luckyandhaley.jpeg",
+  "images/malaysia.jpeg",
   "images/mickeyds.jpeg",
   "images/monkeycostume.jpeg",
   "images/msubar.jpeg",
+  "images/msuselfie.jpeg",
+  "images/mum.jpeg",
   "images/namaste.jpeg",
   "images/nicephototypeshit.jpeg",
+  "images/onthestreet.jpeg",
   "images/outsiderocketfizz.jpeg",
   "images/outsideross.jpeg",
+  "images/pasta.jpeg",
+  "images/photobombed.jpeg",
   "images/photobooth.jpeg",
   "images/rainygame.jpeg",
   "images/rakiluckyram.jpeg",
   "images/rangnight.jpeg",
+  "images/redlips.jpeg",
   "images/redtoungues.jpeg",
   "images/rooftop.jpeg",
   "images/sentosa.jpeg",
   "images/shark.jpeg",
   "images/shreyaparty.jpeg",
   "images/sillyinbar.jpeg",
+  "images/sillyinbar2.jpeg",
   "images/skeeps.jpeg",
   "images/sleep.jpeg",
   "images/snap.jpeg",
+  "images/southbasement.jpeg",
+  "images/studyinross.jpeg",
   "images/tailgate.jpeg",
   "images/tailgate2.jpeg",
+  "images/tomatocurry.jpeg",
+  "images/tomatocurry2.jpeg",
   "images/whitelie.jpeg",
   "images/zwestselfie.jpeg"
-  ]
+]
 
 
 let imagesLoaded = 0;
@@ -414,7 +435,7 @@ function addStar() {
 
   const star = new THREE.Mesh(geometry, material);
   //spread is the range of random positions for the stars
-  const spread = 900;
+  const spread = 1000;
   const [x, y, z] = Array(3).fill().map(() => THREE.MathUtils.randFloatSpread(spread));
   star.position.set(x, y, z);
   rotatingGroup.add(star);
@@ -475,7 +496,7 @@ function addImagePlane(url) {
       const material = new THREE.MeshBasicMaterial({ map: texture, transparent: true });
       const plane = new THREE.Mesh(geometry, material);
   
-      const spread = 750;
+      const spread = 850;
       const [x, y, z] = Array(3).fill().map(() => THREE.MathUtils.randFloatSpread(spread));
       plane.position.set(x, y, z);
       plane.lookAt(0, 0, 0);
