@@ -160,6 +160,31 @@ document.getElementById('resetButton').addEventListener('click', () => {
   document.getElementById('startPresentation').classList.add('hidden');
 });
 
+/*Configure comet themed mouse cursor*/
+const cursor = document.getElementById('cursor-dot');
+document.addEventListener('mousemove', (e) => {
+  cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+});
+
+const trailLength = 15;
+const trail = [];
+
+document.addEventListener('mousemove', (e) => {
+  const trailDot = document.createElement('div');
+  trailDot.className = 'trail-dot';
+  trailDot.style.left = `${e.clientX}px`;
+  trailDot.style.top = `${e.clientY}px`;
+  document.body.appendChild(trailDot);
+  trail.push(trailDot);
+
+  if (trail.length > trailLength) {
+    const oldDot = trail.shift();
+    oldDot.remove();
+  }
+});
+
+
+
 /* Add event listener to handle clicks on the toggle button */
 document.getElementById('chilltogglecontainer').addEventListener('click', () => {
   chillMode = !chillMode;
