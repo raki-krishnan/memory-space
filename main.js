@@ -6,7 +6,7 @@ import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
 
 
-/* Constants to set up the 3D scene with stars, images, and camera animation*/
+/* Constants and variables to set up the 3D scene with stars, images, and camera animation*/
 const scene = new THREE.Scene();
 const rotatingGroup = new THREE.Group();
 scene.add(rotatingGroup);
@@ -19,6 +19,12 @@ let targetLookAt = null;
 let chillMode = true;
 let rotationSpeed = 0.0002;
 let rotationDirection = Math.random() < 0.5 ? 1 : -1;
+let presentationAudio = null;
+let presentationQueue = [];
+let isPresenting = false;
+let selectedSongs = [];
+let selectedButtons = [];
+let currentSongIndex = 0;
 
 
 const imageFilenames = [
@@ -113,6 +119,14 @@ const initialTarget = controls.target.clone();
 document.getElementById('resetButton').addEventListener('click', () => {
   isPresenting = false;
   presentationQueue = [];
+  selectedSongs = [];
+  selectedButtons = [];
+
+  // Remove overlays
+  songButtons.forEach((btn) => {
+    const overlay = btn.querySelector('.songOrder');
+    if (overlay) overlay.remove();
+  });
 
   // Stop music if playing
   if (presentationAudio) {
@@ -191,36 +205,97 @@ document.addEventListener('keydown', (event) => {
 
 /* Add event listener for presentation button */
 document.getElementById('presentation').addEventListener('click', () => {
+  //If already presenting, we want to reset everything
+  if (isPresenting) {
+    isPresenting = false;
+    presentationQueue = [];
+    selectedSongs = [];
+    selectedButtons = [];
+
+    songButtons.forEach((btn) => {
+      const overlay = btn.querySelector('.songOrder');
+      if (overlay) overlay.remove();
+    });
+
+    if (presentationAudio) {
+      presentationAudio.pause();
+      presentationAudio.currentTime = 0;
+    }
+
+    targetCameraPos = initialCameraPos.clone();
+    targetLookAt = initialTarget.clone();
+    document.getElementById('skip').style.display = 'none';
+  }
   presentationScreen.classList.remove('hidden');
 });
 
 /* logic for presentation mode */
-let presentationAudio = null;
-let presentationQueue = [];
-let isPresenting = false;
+function updateSongLabels() {
+  songButtons.forEach((btn) => {
+    const overlay = btn.querySelector('.songOrder');
+    if (overlay) overlay.remove();
+  });
 
-document.querySelectorAll('.songChoice').forEach(button => {
+  selectedButtons.forEach((btn, i) => {
+    const overlay = document.createElement('div');
+    overlay.className = 'songOrder';
+    overlay.textContent = `${i + 1}`;
+    btn.appendChild(overlay);
+  });
+}
+
+
+function playNextSongInQueue() {
+  if (selectedSongs.length === 0) return;
+
+  currentSongIndex = (currentSongIndex + 1) % selectedSongs.length;
+
+  presentationAudio = new Audio(selectedSongs[currentSongIndex]);
+  presentationAudio.play();
+  presentationAudio.addEventListener('ended', playNextSongInQueue);
+}
+
+const songButtons = document.querySelectorAll('.songChoice');
+
+songButtons.forEach(button => {
   button.addEventListener('click', () => {
     const songSrc = button.dataset.src;
-    presentationScreen.classList.add('hidden');
+    const index = selectedSongs.indexOf(songSrc);
 
-    if (presentationAudio) presentationAudio.pause();
-    presentationAudio = new Audio(songSrc);
-    presentationAudio.loop = true;
-    presentationAudio.play();
+    if (index !== -1) {
+      // Song already selected: unselect
+      selectedSongs.splice(index, 1);
+      selectedButtons.splice(index, 1);
+      updateSongLabels();
+    } else if (selectedSongs.length < 3) {
+      selectedSongs.push(songSrc);
+      selectedButtons.push(button);
+      updateSongLabels();
 
-    const waitUntilReady = () => {
-      if (readyForPresentation) {
-        startPresentationMode();
-      } else {
-        setTimeout(waitUntilReady, 100);
+      if (selectedSongs.length === 3) {
+        // Hide the menu and start presentation after short delay
+        setTimeout(() => {
+          document.getElementById('presentationScreen').classList.add('hidden');
+          currentSongIndex = 0;
+          presentationAudio = new Audio(selectedSongs[currentSongIndex]);
+          presentationAudio.play();
+          presentationAudio.addEventListener('ended', () => {
+            playNextSongInQueue();
+          });
+          const waitUntilReady = () => {
+            if (readyForPresentation) {
+              startPresentationMode();
+            } else {
+              setTimeout(waitUntilReady, 100);
+            }
+          };
+          waitUntilReady();
+        }, 500);
       }
-    };
-  
-    waitUntilReady();
-    presentationScreen.classList.add('hidden');
+    }
   });
 });
+
 
 function startPresentationMode() {
   if (clickablePlanes.length === 0) return;
@@ -255,10 +330,22 @@ function goToNextImage() {
   targetCameraPos = new THREE.Vector3().copy(target.position).add(offset);
   targetLookAt = new THREE.Vector3().copy(target.position);
 
-  // Wait ~10 seconds then go to next
+  // Wait ~11 seconds then go to next
   setTimeout(goToNextImage, 11000);
 }
 
+document.getElementById('skip').addEventListener('click', () => {
+  //When clicked, we skip to the next song in the queue
+  if (presentationAudio) {
+    presentationAudio.pause();
+    presentationAudio.currentTime = 0;
+
+    currentSongIndex = (currentSongIndex + 1) % selectedSongs.length;
+    presentationAudio = new Audio(selectedSongs[currentSongIndex]);
+    presentationAudio.loop = true;
+    presentationAudio.play();
+  }
+});
 
 /* Pointlight adds depth and shadows from one direction, and ambient light helps us avoid total darkness */
 const pointLight = new THREE.PointLight(0xffffff, 1.5);
