@@ -404,8 +404,15 @@ function startPresentationMode() {
 }
 
 function goToNextImage() {
-  if (!isPresenting || presentationQueue.length === 0) {
+  if (!isPresenting) {
     isPresenting = false;
+    return;
+  }
+  if(presentationQueue.length === 0){
+    targetCameraPos = initialCameraPos.clone();
+    targetLookAt = initialTarget.clone();
+    isPresenting = false;
+    document.getElementById('skip').style.display = 'none';
     return;
   }
 
