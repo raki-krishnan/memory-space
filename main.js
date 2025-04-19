@@ -26,6 +26,7 @@ let selectedSongs = [];
 let selectedButtons = [];
 let currentSongIndex = 0;
 const clock = new THREE.Clock();
+let isTransitioning = false;
 
 
 const imageFilenames = [
@@ -583,6 +584,11 @@ const mouse = new THREE.Vector2();
 /* Add event listener to handle clicks on the planes. When the user clicks and image it will gently float to the image */
 
 window.addEventListener('click', (event) => {
+  // If in presentation mode, do not allow clicking on images
+  if (isPresenting) {
+    return;
+  }
+
   mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
   mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
@@ -591,6 +597,7 @@ window.addEventListener('click', (event) => {
 
   if (intersects.length > 0) {
     const target = intersects[0].object;
+    controls.target.copy(controls.target);
 
     const direction = new THREE.Vector3();
     target.getWorldDirection(direction);
@@ -598,6 +605,9 @@ window.addEventListener('click', (event) => {
 
     targetCameraPos = new THREE.Vector3().copy(target.position).add(offset);
     targetLookAt = new THREE.Vector3().copy(target.position);
+
+    isTransitioning = true;
+    clock.getDelta();
   }
 });
 
