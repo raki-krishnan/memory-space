@@ -25,6 +25,7 @@ let isPresenting = false;
 let selectedSongs = [];
 let selectedButtons = [];
 let currentSongIndex = 0;
+const clock = new THREE.Clock();
 
 
 const imageFilenames = [
@@ -655,9 +656,15 @@ function animate() {
 
   //7
   if (targetCameraPos && targetLookAt) {
-    let lerpSpeed = isPresenting ? 0.01 : 0.02;
+    // let lerpSpeed = isPresenting ? 0.01 : 0.02;
     // camera.position.lerp(targetCameraPos, lerpSpeed);
     // controls.target.lerp(targetLookAt, lerpSpeed);
+
+    const delta = clock.getDelta();
+    const speedPerSecond = 10.0;
+    const alpha = 1 - Math.pow(1 - 0.1, delta * speedPerSecond);
+    let lerpSpeed = isPresenting ? (alpha / 2): alpha / 2;
+
     camera.position.set(
       THREE.MathUtils.lerp(camera.position.x, targetCameraPos.x, lerpSpeed),
       THREE.MathUtils.lerp(camera.position.y, targetCameraPos.y, lerpSpeed),
